@@ -12,7 +12,7 @@ export default function Register() {
         e.preventDefault();
  
         const formData = new FormData(e.target)
-        instance.post('/auth/register',formData).then(x=>{
+        instance.post('/api/auth/register',formData).then(x=>{
             localStorage.setItem('token',x.data.value)
             router.push('/')
         }).catch(e=>{

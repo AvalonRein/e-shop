@@ -16,7 +16,9 @@ router.group(() => {
     router.group(()=>{
       router.post('/login',[AuthController, 'Login'])
       router.post('/register',[AuthController, 'Register'])
-      router.get('/user',[AuthController, 'GetUser']).use(middleware.auth({guards :['api']}))
+      router.get('/google/redirect',[AuthController, 'googleRedirect'])
+      router.get('/google/callback',[AuthController, 'googleCallback'])
+      router.get('/profile',[AuthController, 'Profile']).use(middleware.auth({guards :['api']}))
     }).prefix('/auth')
 
     router.group(()=>{

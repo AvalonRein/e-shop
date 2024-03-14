@@ -1,9 +1,10 @@
+'use client'
 import axios from "axios";
-const endpoint='http://localhost:3333/api/'
+const endpoint=''
 const instance = axios.create({
     baseURL: endpoint,
     headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${typeof window !== "undefined" ? window.localStorage.getItem('token') : false}`,
 
     },
     // .. other options

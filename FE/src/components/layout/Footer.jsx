@@ -1,6 +1,10 @@
+'use client'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 export default function Footer() {
+    const pathname = usePathname()
+    if(pathname=='/login'||pathname=='/register')return <></>
   return (
     <footer className="p-4 bg-white sm:p-6 dark:bg-gray-800">
     <div className="mx-auto max-w-screen-xl">

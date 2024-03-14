@@ -1,0 +1,14 @@
+{
+  "name": "e-shop",
+  "version": "1.0.0",
+  "description": "dsa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fe":"cd fe && npm run dev",
+    "be":"cd be && npm run dev"
+    
+  },
+  "author": "",
+  "license": "ISC"
+}

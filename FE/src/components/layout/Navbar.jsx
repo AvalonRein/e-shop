@@ -16,6 +16,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import instance from '@/data/instance';
+import Link from 'next/link';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -57,12 +60,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar() {
+    const param = useSearchParams()
+    const [reload, setReload] = React.useState(false)
+    const [user, setUser] = React.useState()
+    const pathname = usePathname()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+    const router = useRouter()
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    React.useEffect(() => {
+        if (param.get('token')) {
+            localStorage.setItem('token', param.get('token'))
+
+            router.push('/')
+            instance.get('api/auth/profile',{headers:{Authorization:`Bearer ${param.get('token')}`}}).then(x => {setUser(x.data);console.log(x.data)}).catch(e => { console.log(e)})
+        }
+        instance.get('api/auth/profile').then(x => setUser(x.data)).catch(e => { })
+    }, [reload])
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -97,8 +113,11 @@ export default function Navbar() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            {user ? <> <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+                <MenuItem onClick={e => {
+                    handleMenuClose();
+                    localStorage.removeItem('token'); router.push('/login')
+                }}><button >Logout</button></MenuItem></> : <MenuItem>Login</MenuItem>}
         </Menu>
     );
 
@@ -119,44 +138,30 @@ export default function Navbar() {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <p>Messages</p>
-            </MenuItem>
-            <MenuItem>
-                <IconButton
-                    size="large"
-                    aria-label="show 17 new notifications"
-                    color="inherit"
-                >
-                    <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <p>Notifications</p>
-            </MenuItem>
-            <MenuItem onClick={handleProfileMenuOpen}>
-                <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="primary-search-account-menu"
-                    aria-haspopup="true"
-                    color="inherit"
-                >
-                    <AccountCircle />
-                </IconButton>
-                <p>Profile</p>
-            </MenuItem>
+            {user ? <>
+                <MenuItem onClick={handleProfileMenuOpen}>
+                    <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="primary-search-account-menu"
+                        aria-haspopup="true"
+                        color="inherit"
+                    >
+                        <AccountCircle />
+                    </IconButton>
+                    <p>Profile</p>
+                </MenuItem>
+                <MenuItem onClick={e => {
+                    handleMenuClose();
+                    localStorage.removeItem('token'); router.push('/login')
+                }}><button>Logout</button></MenuItem>
+            </> : <MenuItem>Login</MenuItem>}
         </Menu>
     );
-
+    if (pathname == '/login' || pathname == '/register') return <></>
     return (
         <Box sx={{ flexGrow: 1 }} >
-            <AppBar position="static" className=' bg-white text-gray-500'>
+            <AppBar position="static" className=' !bg-gradient-to-r from-gray-500 to-gray-800 text-white shadow-xl'>
                 <Toolbar >
                     <IconButton
                         size="large"
@@ -186,21 +191,7 @@ export default function Navbar() {
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
+                    {user ? <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton
                             size="large"
                             edge="end"
@@ -212,7 +203,9 @@ export default function Navbar() {
                         >
                             <AccountCircle />
                         </IconButton>
-                    </Box>
+                    </Box> : <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <Link href={'/login'}>Login</Link>
+                    </Box>}
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
                             size="large"
