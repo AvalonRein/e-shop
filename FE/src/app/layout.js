@@ -19,11 +19,13 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} >
         <Toast />
-       
+
         <Navbar />
+        <div id='root'>
           {children}
+        </div>
         <Footer />
       </body>
     </html>

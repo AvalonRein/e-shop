@@ -5,10 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fe":"cd fe && npm run dev",
-    "be":"cd be && npm run dev"
-    
+    "fe": "cd fe && npm run dev",
+    "be": "cd be && npm run dev"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@gsap/react": "^2.1.0",
+    "@react-three/drei": "^9.102.6",
+    "@react-three/fiber": "^8.15.19",
+    "gsap": "^3.12.5",
+    "three": "^0.162.0"
+  },
+  "devDependencies": {
+    "next-transpile-modules": "^10.0.1"
+  }
 }

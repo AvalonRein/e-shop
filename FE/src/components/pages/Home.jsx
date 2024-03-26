@@ -1,14 +1,16 @@
-import React from 'react'
-import Banner from '../ui/Banner'
-import ProductCard from '../ui/ProductCard'
-import ListProduct from '../ui/ListProduct'
+import Features from "../ui/Features";
+import Hero from "../ui/Hero";
+import Highlights from "../ui/Highlights";
+import Model from "../ui/Model";
 
 
 export default function Home() {
   return (
     <div>
-        <Banner />
-        <ListProduct/>
+      <Hero />
+      <Highlights />
+      <Model />
+      <Features />
     </div>
   )
 }
